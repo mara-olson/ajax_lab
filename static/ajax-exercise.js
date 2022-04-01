@@ -31,8 +31,6 @@ function showWeather(evt) {
     .then((data) => {
       document.querySelector("#weather-info").innerHTML = data["forecast"];
     });
-
-  // TODO: request weather with that URL and show the forecast in #weather-info
 }
 
 document.querySelector("#weather-form").addEventListener("submit", showWeather);
@@ -44,9 +42,8 @@ function orderMelons(evt) {
 
   const formInputs = {
     qty: document.querySelector("#qty-field").value,
-    melon: document.querySelector('[name="melon_type"]').innerText,
+    melon_type: document.querySelector('[name="melon_type"]').innerText,
   };
-  // NOTE: Follow up on extracting melon_type because it's currently showing None
 
   fetch("/order-melons.json", {
     method: "POST",
@@ -58,13 +55,32 @@ function orderMelons(evt) {
     .then((response) => response.json())
     .then((data) => {
       document.querySelector("#order-status").innerHTML = data["msg"];
-      console.log(response);
-      console.log(data);
+
+      const order_status_class =
+        document.querySelector("#order-status").classList;
+
+      if (order_status_class.contains("order-error")) {
+        order_status_class.remove("order-error");
+      }
+
+      if (data["code"] === "ERROR") {
+        order_status_class.add("order-error");
+      }
     });
-
-  // NOTE: Follow up on response is not defined
-
-  // TODO: show the result message after your form
-  // TODO: if the result code is ERROR, make it show up in red (see our CSS!)
 }
 document.querySelector("#order-form").addEventListener("submit", orderMelons);
+
+function getDogImage(evt) {
+  evt.preventDefault();
+  const url = "https://dog.ceo/api/breeds/image/random";
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      document
+        .querySelector("#dog-image")
+        .insertAdjacentHTML("beforeend", `<br><img src=${data["message"]}>`);
+    });
+}
+
+document.querySelector("#get-dog-image").addEventListener("click", getDogImage);
