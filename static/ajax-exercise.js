@@ -74,13 +74,21 @@ function getDogImage(evt) {
   evt.preventDefault();
   const url = "https://dog.ceo/api/breeds/image/random";
 
+  // const elem = document.querySelector("#api-dog-image");
+  // if (elem === null) {
+  //   document
+  //     .querySelector("#dog-image")
+  //     .insertAdjacentHTML("beforeend", `<br><img #api-dog-image>`);
+
   fetch(url)
     .then((response) => response.json())
-    .then((data) => {
-      document
-        .querySelector("#dog-image")
-        .insertAdjacentHTML("beforeend", `<br><img src=${data["message"]}>`);
-    });
+    .then(
+      (data) => {
+        document.querySelector(
+          "#dog-image"
+        ).innerHTML = `<br><img src=${data["message"]}`;
+      }
+      // .insertAdjacentHTML("beforeend", `<br><img src=${data["message"]}>`);
+    );
 }
-
 document.querySelector("#get-dog-image").addEventListener("click", getDogImage);
